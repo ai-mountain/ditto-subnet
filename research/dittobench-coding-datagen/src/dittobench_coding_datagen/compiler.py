@@ -22,7 +22,10 @@ from dittobench_coding_datagen.fixtures import fixture_for
 from dittobench_coding_datagen.model import (
     CODING_CONTRACT_VERSION,
     PRACTICE_AGENT_INSTRUCTION,
+    PRACTICE_BUILD_COMMAND_IDS,
+    PRACTICE_EDITABLE_PATHS,
     PRACTICE_SCHEMA,
+    PRACTICE_TEST_COMMAND_IDS,
     CorpusError,
     PracticeSource,
 )
@@ -75,6 +78,11 @@ def _agent_task(task: dict[str, Any]) -> dict[str, Any]:
         "instruction": PRACTICE_AGENT_INSTRUCTION,
         "problem_statement": task["problem_statement"],
         "repository_id": task["repository_id"],
+        "runtime_policy": {
+            "build_command_ids": list(PRACTICE_BUILD_COMMAND_IDS),
+            "editable_paths": list(PRACTICE_EDITABLE_PATHS),
+            "test_command_ids": list(PRACTICE_TEST_COMMAND_IDS),
+        },
         "task_id": task_id,
         "visible_capsule": f"capsules/{task_id}/visible",
     }
