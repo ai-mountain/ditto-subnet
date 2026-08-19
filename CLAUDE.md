@@ -43,6 +43,7 @@ Load only the returned anchors and the relevant specialized skill:
 | Benchmark datagen research | `research/dittobench-datagen/` |
 | Shadow coding-repair research | `research/dittobench-coding-datagen/` |
 | Miner starter kit | `miners/dittobench-starter-kit/` |
+| Shadow coding-agent starter kit | `miners/dittobench-coding-starter-kit/` |
 | Terraform and Ansible | `infra/` |
 | Release ownership graph | `release/components.toml` |
 | Backroom quarantine and ATH review | `.agents/skills/backroom-review/` |
