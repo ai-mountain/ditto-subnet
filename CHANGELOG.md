@@ -2,6 +2,15 @@
 
 <!-- version list -->
 
+## v0.219.0 (2026-09-05)
+
+### Features
+
+- **coding**: Add native hosted grading and pinned execution
+  ([#1649](https://github.com/ditto-assistant/ditto-subnet/pull/1649),
+  [`5953d8b`](https://github.com/ditto-assistant/ditto-subnet/commit/5953d8b4b8c313606f897de3d5949f93961f0ca2))
+
+
 ## v0.218.0 (2026-09-05)
 
 ### Features
