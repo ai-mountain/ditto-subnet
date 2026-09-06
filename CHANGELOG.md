@@ -2,6 +2,21 @@
 
 <!-- version list -->
 
+## v0.234.0 (2026-09-06)
+
+### Documentation
+
+- Propose Router & Compression competition v1 (shadow contract)
+  ([#1683](https://github.com/ditto-assistant/ditto-subnet/pull/1683),
+  [`b93ed2f`](https://github.com/ditto-assistant/ditto-subnet/commit/b93ed2f2dbaf2217342132e16f501bfab136d40e))
+
+### Features
+
+- **coding**: Compose private platform worker startup
+  ([#1690](https://github.com/ditto-assistant/ditto-subnet/pull/1690),
+  [`c3cea91`](https://github.com/ditto-assistant/ditto-subnet/commit/c3cea913874bb6983bc5d63ebf3671bd7f165c2a))
+
+
 ## v0.233.0 (2026-09-06)
 
 ### Features
