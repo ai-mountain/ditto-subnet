@@ -2,6 +2,15 @@
 
 <!-- version list -->
 
+## v0.224.0 (2026-09-06)
+
+### Features
+
+- **coding**: Add native hosted inference authority and budgets
+  ([#1654](https://github.com/ditto-assistant/ditto-subnet/pull/1654),
+  [`fe4457b`](https://github.com/ditto-assistant/ditto-subnet/commit/fe4457b3dcc9202718c4af9768712524bf65263b))
+
+
 ## v0.223.0 (2026-09-06)
 
 ### Features
