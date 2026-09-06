@@ -2,6 +2,15 @@
 
 <!-- version list -->
 
+## v0.231.0 (2026-09-06)
+
+### Features
+
+- **coding**: Connect platform authoring control adapters
+  ([#1662](https://github.com/ditto-assistant/ditto-subnet/pull/1662),
+  [`eec5bb3`](https://github.com/ditto-assistant/ditto-subnet/commit/eec5bb3c787158828951cc0c580a09c0b4f686a3))
+
+
 ## v0.230.0 (2026-09-06)
 
 ### Features
