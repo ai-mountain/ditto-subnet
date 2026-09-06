@@ -2,6 +2,15 @@
 
 <!-- version list -->
 
+## v0.222.0 (2026-09-06)
+
+### Features
+
+- **coding**: Connect hosted lifecycle to PostgreSQL start authority
+  ([#1652](https://github.com/ditto-assistant/ditto-subnet/pull/1652),
+  [`473fdcd`](https://github.com/ditto-assistant/ditto-subnet/commit/473fdcd0f320b47ed6d38e8c3cc45060bd483e0b))
+
+
 ## v0.221.0 (2026-09-06)
 
 ### Features
