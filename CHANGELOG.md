@@ -2,6 +2,15 @@
 
 <!-- version list -->
 
+## v0.227.0 (2026-09-06)
+
+### Features
+
+- **coding**: Bind runtime budget and provider profiles
+  ([#1657](https://github.com/ditto-assistant/ditto-subnet/pull/1657),
+  [`3b51429`](https://github.com/ditto-assistant/ditto-subnet/commit/3b514296edeabfcd6034cbf325d664ef7ff6f796))
+
+
 ## v0.226.0 (2026-09-06)
 
 ### Features
