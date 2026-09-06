@@ -2,6 +2,15 @@
 
 <!-- version list -->
 
+## v0.226.0 (2026-09-06)
+
+### Features
+
+- **coding**: Connect native source-bound inference relay
+  ([#1656](https://github.com/ditto-assistant/ditto-subnet/pull/1656),
+  [`13c1a47`](https://github.com/ditto-assistant/ditto-subnet/commit/13c1a4797a0409cac53d763e8fb3cc9193876a39))
+
+
 ## v0.225.0 (2026-09-06)
 
 ### Features
