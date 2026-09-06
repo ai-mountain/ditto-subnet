@@ -2,6 +2,15 @@
 
 <!-- version list -->
 
+## v0.228.0 (2026-09-06)
+
+### Features
+
+- **coding**: Seal native inference evidence in Hippius
+  ([#1658](https://github.com/ditto-assistant/ditto-subnet/pull/1658),
+  [`bd1f915`](https://github.com/ditto-assistant/ditto-subnet/commit/bd1f915ef4be03c797f9e2d5f9a7a2a753708669))
+
+
 ## v0.227.0 (2026-09-06)
 
 ### Features
