@@ -2,6 +2,15 @@
 
 <!-- version list -->
 
+## v0.233.0 (2026-09-06)
+
+### Features
+
+- **coding**: Add protected one-attempt hosted worker launcher
+  ([#1689](https://github.com/ditto-assistant/ditto-subnet/pull/1689),
+  [`c45987e`](https://github.com/ditto-assistant/ditto-subnet/commit/c45987ec24a87331809a732bddfe454ab56b339f))
+
+
 ## v0.232.0 (2026-09-06)
 
 ### Features
