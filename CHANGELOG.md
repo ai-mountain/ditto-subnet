@@ -2,6 +2,15 @@
 
 <!-- version list -->
 
+## v0.229.0 (2026-09-06)
+
+### Features
+
+- **coding**: Coordinate native authoring worker lifecycle
+  ([#1659](https://github.com/ditto-assistant/ditto-subnet/pull/1659),
+  [`e4ec5c7`](https://github.com/ditto-assistant/ditto-subnet/commit/e4ec5c7690745a6f63cece246bf867e679d2ca81))
+
+
 ## v0.228.0 (2026-09-06)
 
 ### Features
