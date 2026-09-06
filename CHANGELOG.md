@@ -2,6 +2,15 @@
 
 <!-- version list -->
 
+## v0.232.0 (2026-09-06)
+
+### Features
+
+- **coding**: Connect native grading and signed terminal results
+  ([#1688](https://github.com/ditto-assistant/ditto-subnet/pull/1688),
+  [`3fab9b5`](https://github.com/ditto-assistant/ditto-subnet/commit/3fab9b5ccbf2b6d16ad04d88ac217279c3e96daf))
+
+
 ## v0.231.0 (2026-09-06)
 
 ### Features
