@@ -2,6 +2,15 @@
 
 <!-- version list -->
 
+## v0.225.0 (2026-09-06)
+
+### Features
+
+- **coding**: Add native hosted provider adapter
+  ([#1655](https://github.com/ditto-assistant/ditto-subnet/pull/1655),
+  [`c6aa33a`](https://github.com/ditto-assistant/ditto-subnet/commit/c6aa33a1b10ceaf5c9bba865c5d4bc147b12270d))
+
+
 ## v0.224.0 (2026-09-06)
 
 ### Features
