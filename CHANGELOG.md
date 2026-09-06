@@ -2,6 +2,15 @@
 
 <!-- version list -->
 
+## v0.221.0 (2026-09-06)
+
+### Features
+
+- **coding**: Add native hosted harness lifecycle and source routes
+  ([#1651](https://github.com/ditto-assistant/ditto-subnet/pull/1651),
+  [`ce6d14d`](https://github.com/ditto-assistant/ditto-subnet/commit/ce6d14d4a41c3e667950fa1f3f0048bca0b59faf))
+
+
 ## v0.220.0 (2026-09-06)
 
 ### Features
