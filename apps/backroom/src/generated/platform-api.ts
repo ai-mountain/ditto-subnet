@@ -21547,7 +21547,7 @@ export interface components {
          * @example {
          *       "detail": "",
          *       "passed": true,
-         *       "policy_version": 11,
+         *       "policy_version": 12,
          *       "screener_hotkey": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
          *       "signature": "abababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababab"
          *     }
@@ -23254,7 +23254,7 @@ export interface components {
             notes_considered: number;
             /**
              * Policy Version
-             * @default 11
+             * @default 12
              */
             policy_version: number;
             /** Prompt Revision */
