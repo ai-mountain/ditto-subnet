@@ -2,6 +2,15 @@
 
 <!-- version list -->
 
+## v0.223.0 (2026-09-06)
+
+### Features
+
+- **coding**: Assemble verified hosted authoring inputs
+  ([#1653](https://github.com/ditto-assistant/ditto-subnet/pull/1653),
+  [`86e0a57`](https://github.com/ditto-assistant/ditto-subnet/commit/86e0a5789fc2019a3b756cb5dec16b11b20c7cd2))
+
+
 ## v0.222.0 (2026-09-06)
 
 ### Features
