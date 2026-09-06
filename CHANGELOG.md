@@ -2,6 +2,15 @@
 
 <!-- version list -->
 
+## v0.230.0 (2026-09-06)
+
+### Features
+
+- **screener**: Screening policy v12 names scorer-visible slot rewrites
+  ([#1660](https://github.com/ditto-assistant/ditto-subnet/pull/1660),
+  [`a18cd02`](https://github.com/ditto-assistant/ditto-subnet/commit/a18cd02af5764caf3edfdd0e1aacd6c71ffaabff))
+
+
 ## v0.229.0 (2026-09-06)
 
 ### Features
