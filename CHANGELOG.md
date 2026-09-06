@@ -2,6 +2,15 @@
 
 <!-- version list -->
 
+## v0.234.1 (2026-09-06)
+
+### Bug Fixes
+
+- **platform**: Consolidate dashboard canonical origins
+  ([#1691](https://github.com/ditto-assistant/ditto-subnet/pull/1691),
+  [`331fcc9`](https://github.com/ditto-assistant/ditto-subnet/commit/331fcc90094762abb8162284fea23a29635f78ec))
+
+
 ## v0.234.0 (2026-09-06)
 
 ### Documentation
