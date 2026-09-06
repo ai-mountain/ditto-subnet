@@ -2,6 +2,15 @@
 
 <!-- version list -->
 
+## v0.220.0 (2026-09-06)
+
+### Features
+
+- **coding**: Connect native v2 harness requests and starter
+  ([#1650](https://github.com/ditto-assistant/ditto-subnet/pull/1650),
+  [`c12fcf0`](https://github.com/ditto-assistant/ditto-subnet/commit/c12fcf00124d6561b8967eddb155ab20a495d8b5))
+
+
 ## v0.219.0 (2026-09-05)
 
 ### Features
