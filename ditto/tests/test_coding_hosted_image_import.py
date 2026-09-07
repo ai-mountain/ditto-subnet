@@ -84,11 +84,13 @@ def fixture_entries(config=None, alter_manifest=None):
     return files
 
 
-def prepared(tmp_path, repository=REPO):
+def prepared(tmp_path, repository=REPO, profile=POLICY.PROFILE):
     source, output, manifest = (
         tmp_path / n for n in ("source.tar", "image.tar", "approval.json")
     )
-    source.write_bytes(tar_bytes(fixture_entries().items()))
+    config = configuration()
+    config["Labels"][POLICY.PREFIX + "coding-test-driver-profile"] = profile
+    source.write_bytes(tar_bytes(fixture_entries(config).items()))
     approval = POLICY.prepare(source, output, manifest, repository, REVISION)
     raw = manifest.read_bytes()
     return output, raw, hashlib.sha256(raw).hexdigest(), approval
@@ -121,6 +123,37 @@ def test_prepare_never_overwrites_existing_output(tmp_path):
             tmp_path / "source.tar", output, tmp_path / "new.json", REPO, REVISION
         )
     assert output.read_bytes() == before
+
+
+@pytest.mark.parametrize("profile", ["python-call-ast-v1", "python-call-ast-v2"])
+def test_driver_profile_is_bound_to_archive_and_loaded_image(tmp_path, profile):
+    output, raw, sha, approval = prepared(tmp_path, profile=profile)
+    assert approval["driver_profile"] == profile
+    with output.open("rb") as stream:
+        assert POLICY.verify(stream, raw, sha) == approval
+    config = configuration()
+    config["Labels"][POLICY.PREFIX + "coding-test-driver-profile"] = profile
+    loaded = [
+        {
+            "RepoDigests": [approval["image_ref"]],
+            "Id": approval["config_digest"],
+            "Descriptor": {"digest": approval["image_ref"].split("@")[1]},
+            "Os": "linux",
+            "Architecture": "amd64",
+            "Config": config,
+        }
+    ]
+    POLICY.validate_loaded(loaded, approval)
+    other = "python-call-ast-v1" if profile.endswith("v2") else "python-call-ast-v2"
+    altered = POLICY.json_bytes({**approval, "driver_profile": other})
+    with (
+        output.open("rb") as stream,
+        pytest.raises(ValueError, match="approval fields"),
+    ):
+        POLICY.verify(stream, altered, hashlib.sha256(altered).hexdigest())
+    config["Labels"][POLICY.PREFIX + "coding-test-driver-profile"] = other
+    with pytest.raises(ValueError, match="loaded driver profile"):
+        POLICY.validate_loaded(loaded, approval)
 
 
 @pytest.mark.parametrize(

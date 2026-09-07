@@ -9,8 +9,11 @@ Coding inputs or evidence; those remain Hippius-only.
 ## Build and review
 
 Use an isolated clean checkout of the exact reviewed integrated revision. The
-current production driver profile is **Python `python-call-ast-v1` only**. This
-does not approve Node/TypeScript, Go or Rust execution.
+importer supports Python `python-call-ast-v1` and `python-call-ast-v2`. The
+profile is read from the verified image config, committed into the approval,
+and checked again against the loaded image. Each image still requires its own
+independently pinned approval SHA; an approval for v1 cannot authorize v2.
+Node/TypeScript, Go and Rust profiles remain outside this import policy.
 
 ```bash
 revision="$(git rev-parse HEAD)"

@@ -41,6 +41,7 @@ LAYER_TYPES = {
 }
 ENTRYPOINT = ["/usr/local/bin/dittobench-coding-supervisor"]
 PROFILE = "python-call-ast-v1"
+PROFILES = frozenset({PROFILE, "python-call-ast-v2"})
 PREFIX = "io.heyditto.dittobench."
 SOCKET = Path("/run/ditto-coding-hosted/docker.sock")
 HOME_DIR = Path("/var/lib/ditto-coding-hosted")
@@ -159,7 +160,7 @@ def config_policy(config, revision):
         "wrong supervisor contract",
     )
     require(
-        labels.get(PREFIX + "coding-test-driver-profile") == PROFILE,
+        labels.get(PREFIX + "coding-test-driver-profile") in PROFILES,
         "unapproved driver profile",
     )
     require(
@@ -170,6 +171,7 @@ def config_policy(config, revision):
         labels.get("org.opencontainers.image.revision") == revision,
         "source revision mismatch",
     )
+    return labels[PREFIX + "coding-test-driver-profile"]
 
 
 class BlobReader:
@@ -249,7 +251,7 @@ def graph(stream, revision):
         "unsupported image platform",
     )
     require(config.get("variant", "") == "", "unsupported platform variant")
-    config_policy(config.get("config"), revision)
+    profile = config_policy(config.get("config"), revision)
     layers = manifest.get("layers")
     require(isinstance(layers, list) and 1 <= len(layers) <= 128, "invalid layer count")
     for layer in layers:
@@ -287,10 +289,13 @@ def graph(stream, revision):
         require(
             "sha256:" + digest.hexdigest() == expected_diff_id, "layer diff ID mismatch"
         )
-    return files, selected["digest"], manifest["config"]["digest"], selected
+    return files, selected["digest"], manifest["config"]["digest"], selected, profile
 
 
-def approval_for(archive_sha, repository, image_digest, config_digest, revision):
+def approval_for(
+    archive_sha, repository, image_digest, config_digest, revision, profile=PROFILE
+):
+    require(profile in PROFILES, "unapproved driver profile")
     require(
         isinstance(repository, str)
         and len(repository) <= 200
@@ -303,7 +308,7 @@ def approval_for(archive_sha, repository, image_digest, config_digest, revision)
         "image_ref": repository + "@" + image_digest,
         "config_digest": config_digest,
         "source_revision": revision,
-        "driver_profile": PROFILE,
+        "driver_profile": profile,
         "shadow_only": True,
         "weight_eligible": False,
     }
@@ -312,9 +317,9 @@ def approval_for(archive_sha, repository, image_digest, config_digest, revision)
 def prepare(source, output, approval_path, repository, revision):
     """Normalize only transport metadata; image manifest/config bytes stay exact."""
     with source.open("rb") as stream:
-        files, image_digest, config_digest, _ = graph(stream, revision)
+        files, image_digest, config_digest, _, profile = graph(stream, revision)
         image_ref = repository + "@" + image_digest
-        approval_for("", repository, image_digest, config_digest, revision)
+        approval_for("", repository, image_digest, config_digest, revision, profile)
         index = json_bytes(
             {
                 "schemaVersion": 2,
@@ -344,7 +349,12 @@ def prepare(source, output, approval_path, repository, revision):
                 )
         with output.open("rb") as raw:
             approval = approval_for(
-                digest_file(raw), repository, image_digest, config_digest, revision
+                digest_file(raw),
+                repository,
+                image_digest,
+                config_digest,
+                revision,
+                profile,
             )
             verify(
                 raw,
@@ -373,7 +383,7 @@ def verify(stream, approval_raw, expected_sha):
     require(stream.tell() <= MAX_ARCHIVE, "archive exceeds bound")
     archive_sha = digest_file(stream)
     require(approval.get("archive_sha256") == archive_sha, "archive SHA mismatch")
-    _, actual_digest, config_digest, selected = graph(
+    _, actual_digest, config_digest, selected, profile = graph(
         stream, approval.get("source_revision", "")
     )
     require(actual_digest == image_digest, "image manifest digest mismatch")
@@ -385,6 +395,7 @@ def verify(stream, approval_raw, expected_sha):
             actual_digest,
             config_digest,
             approval["source_revision"],
+            profile,
         ),
         "approval fields mismatch",
     )
@@ -511,7 +522,11 @@ def validate_loaded(info, approval):
         item.get("Os") == "linux" and item.get("Architecture") == "amd64",
         "loaded image platform mismatch",
     )
-    config_policy(item.get("Config"), approval["source_revision"])
+    require(
+        config_policy(item.get("Config"), approval["source_revision"])
+        == approval["driver_profile"],
+        "loaded driver profile mismatch",
+    )
 
 
 def private(path, uid, mode, kind):
