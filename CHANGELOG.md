@@ -2,6 +2,15 @@
 
 <!-- version list -->
 
+## v0.235.0 (2026-09-07)
+
+### Features
+
+- **coding**: Add restricted python oracle driver image
+  ([#1692](https://github.com/ditto-assistant/ditto-subnet/pull/1692),
+  [`e82b47a`](https://github.com/ditto-assistant/ditto-subnet/commit/e82b47aba060a8241c2449b31edc1ea706a4cac9))
+
+
 ## v0.234.1 (2026-09-06)
 
 ### Bug Fixes
