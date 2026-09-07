@@ -2,6 +2,15 @@
 
 <!-- version list -->
 
+## v0.236.0 (2026-09-07)
+
+### Features
+
+- **screener**: Announce fleet release and builtin policy in heartbeats
+  ([#1684](https://github.com/ditto-assistant/ditto-subnet/pull/1684),
+  [`decad9f`](https://github.com/ditto-assistant/ditto-subnet/commit/decad9f5d309b3af81aaeb7d66dcac719abf4aac))
+
+
 ## v0.235.0 (2026-09-07)
 
 ### Features
