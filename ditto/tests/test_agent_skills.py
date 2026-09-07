@@ -88,6 +88,12 @@ def test_coding_package_bootstrap_routes_to_native_host():
     assert lookup("coding package bootstrap")[0]["id"] == "coding-hosted-host"
 
 
+def test_native_worker_network_routes_to_scoped_connectivity():
+    topic = lookup("native trusted connectivity")[0]
+    assert topic["id"] == "coding-hosted-connectivity"
+    assert topic_list(topic, "skills") == ["ditto-subnet-release-ops"]
+
+
 def test_hosted_worker_launcher_routes_to_native_runtime() -> None:
     topic = lookup("hosted worker launcher")[0]
     assert topic["id"] == "coding-hosted-inputs"
