@@ -2,6 +2,19 @@
 
 <!-- version list -->
 
+## v0.238.0 (2026-09-07)
+
+### Features
+
+- **coding**: Add confined Go grading runtime
+  ([#1710](https://github.com/ditto-assistant/ditto-subnet/pull/1710),
+  [`183d026`](https://github.com/ditto-assistant/ditto-subnet/commit/183d0269287cc44328681bce3931ba036d9733f3))
+
+- **coding**: Confine compiled candidates before initialization
+  ([#1704](https://github.com/ditto-assistant/ditto-subnet/pull/1704),
+  [`df34679`](https://github.com/ditto-assistant/ditto-subnet/commit/df346793fb16f7a675fff761fc4ba65158f41837))
+
+
 ## v0.237.0 (2026-09-07)
 
 ### Features
