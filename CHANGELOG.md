@@ -2,6 +2,15 @@
 
 <!-- version list -->
 
+## v0.239.0 (2026-09-07)
+
+### Features
+
+- **coding**: Extend Python oracle suite compatibility
+  ([#1712](https://github.com/ditto-assistant/ditto-subnet/pull/1712),
+  [`442ad46`](https://github.com/ditto-assistant/ditto-subnet/commit/442ad4691dcee1b40f1934db3f29df3caaca1504))
+
+
 ## v0.238.0 (2026-09-07)
 
 ### Features
