@@ -15,6 +15,44 @@ pub trait NativeValue: sealed::Sealed {
 pub trait NativeDecode: NativeValue + Sized {
     fn from_value(value: &Value) -> Result<Self>;
 }
+/// Borrowed text points only into this request's owned data in the confined
+/// bridge process. The Rust lifetime prevents use after request disposal.
+/// ```compile_fail
+/// use coding_rust_suite::{native::BorrowDecode,value::Value};
+/// fn escape(value: Value) -> &'static str {
+///     <&str as BorrowDecode>::from_borrowed(&value).unwrap()
+/// }
+/// ```
+pub trait BorrowDecode<'value>: NativeValue + Sized {
+    fn from_borrowed(value: &'value Value) -> Result<Self>;
+}
+/// Fixed per-process budget for static text required by approved input ABIs.
+/// Allocations live only in the confined candidate process, reclaimed on reap.
+pub struct StaticTextBudget {
+    bytes: usize,
+    strings: usize,
+}
+impl Default for StaticTextBudget {
+    fn default() -> Self {
+        Self {
+            bytes: 4 << 20,
+            strings: 262_144,
+        }
+    }
+}
+impl StaticTextBudget {
+    fn copy(&mut self, text: &str) -> Result<&'static str> {
+        if text.len() > self.bytes || self.strings == 0 {
+            return Err(ConversionError);
+        }
+        self.bytes -= text.len();
+        self.strings -= 1;
+        Ok(Box::leak(text.to_owned().into_boxed_str()))
+    }
+}
+pub trait StaticTextDecode: NativeValue + Sized {
+    fn from_static_text(value: &Value, budget: &mut StaticTextBudget) -> Result<Self>;
+}
 fn make(kind: Type, data: Data) -> Result<Value> {
     Value::new(kind, data).map_err(|_| ConversionError)
 }
@@ -60,6 +98,16 @@ macro_rules! scalar {
                 }
             }
         }
+        impl<'value> BorrowDecode<'value> for $ty {
+            fn from_borrowed(value: &'value Value) -> Result<Self> {
+                Self::from_value(value)
+            }
+        }
+        impl StaticTextDecode for $ty {
+            fn from_static_text(value: &Value, _budget: &mut StaticTextBudget) -> Result<Self> {
+                Self::from_value(value)
+            }
+        }
     };
 }
 scalar!(bool, Type::Bool, Bool);
@@ -82,6 +130,16 @@ macro_rules! integer {
                 } else {
                     Err(ConversionError)
                 }
+            }
+        }
+        impl<'value> BorrowDecode<'value> for $ty {
+            fn from_borrowed(value: &'value Value) -> Result<Self> {
+                Self::from_value(value)
+            }
+        }
+        impl StaticTextDecode for $ty {
+            fn from_static_text(value: &Value, _budget: &mut StaticTextBudget) -> Result<Self> {
+                Self::from_value(value)
             }
         }
     };
@@ -127,6 +185,32 @@ impl NativeDecode for String {
         }
     }
 }
+impl<'value> BorrowDecode<'value> for String {
+    fn from_borrowed(value: &'value Value) -> Result<Self> {
+        Self::from_value(value)
+    }
+}
+impl StaticTextDecode for String {
+    fn from_static_text(value: &Value, _budget: &mut StaticTextBudget) -> Result<Self> {
+        Self::from_value(value)
+    }
+}
+impl StaticTextDecode for &'static str {
+    fn from_static_text(value: &Value, budget: &mut StaticTextBudget) -> Result<Self> {
+        budget.copy(<&str as BorrowDecode>::from_borrowed(value)?)
+    }
+}
+impl<'value> BorrowDecode<'value> for &'value str {
+    fn from_borrowed(value: &'value Value) -> Result<Self> {
+        let Data::Ref(inner) = typed::<Self>(value)? else {
+            return Err(ConversionError);
+        };
+        let Data::Text(text) = typed::<str>(inner)? else {
+            return Err(ConversionError);
+        };
+        Ok(text.as_str())
+    }
+}
 impl<T: NativeValue + ?Sized> sealed::Sealed for &T {}
 impl<T: NativeValue + ?Sized> NativeValue for &T {
     fn kind() -> Type {
@@ -169,6 +253,27 @@ impl<T: NativeDecode> NativeDecode for Vec<T> {
         }
     }
 }
+impl<'value, T: BorrowDecode<'value>> BorrowDecode<'value> for Vec<T> {
+    fn from_borrowed(value: &'value Value) -> Result<Self> {
+        if let Data::Sequence(values) = typed::<Self>(value)? {
+            values.iter().map(T::from_borrowed).collect()
+        } else {
+            Err(ConversionError)
+        }
+    }
+}
+impl<T: StaticTextDecode> StaticTextDecode for Vec<T> {
+    fn from_static_text(value: &Value, budget: &mut StaticTextBudget) -> Result<Self> {
+        if let Data::Sequence(values) = typed::<Self>(value)? {
+            values
+                .iter()
+                .map(|v| T::from_static_text(v, budget))
+                .collect()
+        } else {
+            Err(ConversionError)
+        }
+    }
+}
 impl<T: NativeValue, const N: usize> sealed::Sealed for [T; N] {}
 impl<T: NativeValue, const N: usize> NativeValue for [T; N] {
     fn kind() -> Type {
@@ -187,6 +292,34 @@ impl<T: NativeDecode, const N: usize> NativeDecode for [T; N] {
             values
                 .iter()
                 .map(T::from_value)
+                .collect::<Result<Vec<_>>>()?
+                .try_into()
+                .map_err(|_| ConversionError)
+        } else {
+            Err(ConversionError)
+        }
+    }
+}
+impl<'value, T: BorrowDecode<'value>, const N: usize> BorrowDecode<'value> for [T; N] {
+    fn from_borrowed(value: &'value Value) -> Result<Self> {
+        if let Data::Sequence(values) = typed::<Self>(value)? {
+            values
+                .iter()
+                .map(T::from_borrowed)
+                .collect::<Result<Vec<_>>>()?
+                .try_into()
+                .map_err(|_| ConversionError)
+        } else {
+            Err(ConversionError)
+        }
+    }
+}
+impl<T: StaticTextDecode, const N: usize> StaticTextDecode for [T; N] {
+    fn from_static_text(value: &Value, budget: &mut StaticTextBudget) -> Result<Self> {
+        if let Data::Sequence(values) = typed::<Self>(value)? {
+            values
+                .iter()
+                .map(|v| T::from_static_text(v, budget))
                 .collect::<Result<Vec<_>>>()?
                 .try_into()
                 .map_err(|_| ConversionError)
@@ -219,6 +352,24 @@ impl<T: NativeDecode> NativeDecode for Option<T> {
         }
     }
 }
+impl<'value, T: BorrowDecode<'value>> BorrowDecode<'value> for Option<T> {
+    fn from_borrowed(value: &'value Value) -> Result<Self> {
+        match typed::<Self>(value)? {
+            Data::None => Ok(None),
+            Data::Some(v) => Ok(Some(T::from_borrowed(v)?)),
+            _ => Err(ConversionError),
+        }
+    }
+}
+impl<T: StaticTextDecode> StaticTextDecode for Option<T> {
+    fn from_static_text(value: &Value, budget: &mut StaticTextBudget) -> Result<Self> {
+        match typed::<Self>(value)? {
+            Data::None => Ok(None),
+            Data::Some(v) => Ok(Some(T::from_static_text(v, budget)?)),
+            _ => Err(ConversionError),
+        }
+    }
+}
 impl<T: NativeValue, E: NativeValue> sealed::Sealed for std::result::Result<T, E> {}
 impl<T: NativeValue, E: NativeValue> NativeValue for std::result::Result<T, E> {
     fn kind() -> Type {
@@ -243,6 +394,26 @@ impl<T: NativeDecode, E: NativeDecode> NativeDecode for std::result::Result<T, E
         }
     }
 }
+impl<'value, T: BorrowDecode<'value>, E: BorrowDecode<'value>> BorrowDecode<'value>
+    for std::result::Result<T, E>
+{
+    fn from_borrowed(value: &'value Value) -> Result<Self> {
+        match typed::<Self>(value)? {
+            Data::Ok(v) => Ok(Ok(T::from_borrowed(v)?)),
+            Data::Err(v) => Ok(Err(E::from_borrowed(v)?)),
+            _ => Err(ConversionError),
+        }
+    }
+}
+impl<T: StaticTextDecode, E: StaticTextDecode> StaticTextDecode for std::result::Result<T, E> {
+    fn from_static_text(value: &Value, budget: &mut StaticTextBudget) -> Result<Self> {
+        match typed::<Self>(value)? {
+            Data::Ok(v) => Ok(Ok(T::from_static_text(v, budget)?)),
+            Data::Err(v) => Ok(Err(E::from_static_text(v, budget)?)),
+            _ => Err(ConversionError),
+        }
+    }
+}
 impl sealed::Sealed for () {}
 impl NativeValue for () {
     fn kind() -> Type {
@@ -257,6 +428,16 @@ impl NativeDecode for () {
         typed::<Self>(value).map(|_| ())
     }
 }
+impl<'value> BorrowDecode<'value> for () {
+    fn from_borrowed(value: &'value Value) -> Result<Self> {
+        Self::from_value(value)
+    }
+}
+impl StaticTextDecode for () {
+    fn from_static_text(value: &Value, _budget: &mut StaticTextBudget) -> Result<Self> {
+        Self::from_value(value)
+    }
+}
 macro_rules! tuple {
     ($($ty:ident:$idx:tt),+) => {
         impl<$($ty: NativeValue),+> sealed::Sealed for ($($ty,)+) {}
@@ -268,6 +449,16 @@ macro_rules! tuple {
             fn from_value(value: &Value) -> Result<Self> {
                 if let Data::Tuple(values) = typed::<Self>(value)? { Ok(($($ty::from_value(&values[$idx])?,)+)) }
                 else { Err(ConversionError) }
+            }
+        }
+        impl<'value,$($ty: BorrowDecode<'value>),+> BorrowDecode<'value> for ($($ty,)+) {
+            fn from_borrowed(value: &'value Value) -> Result<Self> {
+                if let Data::Tuple(values)=typed::<Self>(value)? { Ok(($($ty::from_borrowed(&values[$idx])?,)+)) } else { Err(ConversionError) }
+            }
+        }
+        impl<$($ty:StaticTextDecode),+> StaticTextDecode for ($($ty,)+) {
+            fn from_static_text(value:&Value,budget:&mut StaticTextBudget)->Result<Self>{
+                if let Data::Tuple(values)=typed::<Self>(value)? {Ok(($($ty::from_static_text(&values[$idx],budget)?,)+))}else{Err(ConversionError)}
             }
         }
     }
@@ -304,5 +495,49 @@ pub fn decode_slice<T: NativeDecode>(value: &Value) -> Result<Vec<T>> {
         values.iter().map(T::from_value).collect()
     } else {
         Err(ConversionError)
+    }
+}
+pub fn decode_borrowed_slice<'value, T: BorrowDecode<'value>>(
+    value: &'value Value,
+) -> Result<Vec<T>> {
+    if value.kind() != &Type::Slice(Box::new(T::kind())) {
+        return Err(ConversionError);
+    }
+    if let Data::Sequence(values) = value.data() {
+        values.iter().map(T::from_borrowed).collect()
+    } else {
+        Err(ConversionError)
+    }
+}
+pub fn decode_static_slice<T: StaticTextDecode>(
+    value: &Value,
+    budget: &mut StaticTextBudget,
+) -> Result<Vec<T>> {
+    if value.kind() != &Type::Slice(Box::new(T::kind())) {
+        return Err(ConversionError);
+    }
+    if let Data::Sequence(values) = value.data() {
+        values
+            .iter()
+            .map(|v| T::from_static_text(v, budget))
+            .collect()
+    } else {
+        Err(ConversionError)
+    }
+}
+
+#[cfg(test)]
+mod static_tests {
+    use super::*;
+    #[test]
+    fn static_text_budget_bounds_allocations_before_copy() {
+        let mut budget = StaticTextBudget {
+            bytes: 3,
+            strings: 2,
+        };
+        assert_eq!(budget.copy("abc").unwrap(), "abc");
+        assert!(budget.copy("x").is_err());
+        assert_eq!(budget.copy("").unwrap(), "");
+        assert!(budget.copy("").is_err());
     }
 }
