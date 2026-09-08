@@ -2,6 +2,19 @@
 
 <!-- version list -->
 
+## v0.242.0 (2026-09-08)
+
+### Features
+
+- **coding**: Add closed Rust private suite admission
+  ([#1716](https://github.com/ditto-assistant/ditto-subnet/pull/1716),
+  [`c596760`](https://github.com/ditto-assistant/ditto-subnet/commit/c5967604a01555e1fc00c953b5471d8096fc7110))
+
+- **coding**: Add parent-owned typed Rust evaluation
+  ([#1722](https://github.com/ditto-assistant/ditto-subnet/pull/1722),
+  [`29d7dbf`](https://github.com/ditto-assistant/ditto-subnet/commit/29d7dbffd1ddc4c70209c03c98afaaaa336f5200))
+
+
 ## v0.241.0 (2026-09-08)
 
 ### Features
