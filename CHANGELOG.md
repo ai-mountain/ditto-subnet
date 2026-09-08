@@ -2,6 +2,15 @@
 
 <!-- version list -->
 
+## v0.240.0 (2026-09-08)
+
+### Features
+
+- **coding**: Support private Node suite promises and callbacks
+  ([#1715](https://github.com/ditto-assistant/ditto-subnet/pull/1715),
+  [`c7ef93d`](https://github.com/ditto-assistant/ditto-subnet/commit/c7ef93d9450309b3f3a6a434fba0fadff39e6415))
+
+
 ## v0.239.0 (2026-09-07)
 
 ### Features
