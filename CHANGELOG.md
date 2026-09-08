@@ -2,6 +2,35 @@
 
 <!-- version list -->
 
+## v0.243.0 (2026-09-08)
+
+### Features
+
+- **coding**: Add bounded Rust data transport
+  ([#1724](https://github.com/ditto-assistant/ditto-subnet/pull/1724),
+  [`8e3e77a`](https://github.com/ditto-assistant/ditto-subnet/commit/8e3e77a33d68aa38aa1d727f0fd6362ac1eb65ef))
+
+- **coding**: Add fixed Rust API bridge and compiled probes
+  ([#1725](https://github.com/ditto-assistant/ditto-subnet/pull/1725),
+  [`1d2cd5d`](https://github.com/ditto-assistant/ditto-subnet/commit/1d2cd5d512d1467cbcbdce43662f66c70d35990d))
+
+- **coding**: Add four-language runtime qualification controls
+  ([#1731](https://github.com/ditto-assistant/ditto-subnet/pull/1731),
+  [`162ec42`](https://github.com/ditto-assistant/ditto-subnet/commit/162ec423cd28c8865c2da4d37afdfc86d8dc7f87))
+
+- **coding**: Integrate Rust supervisor and private evidence
+  ([#1729](https://github.com/ditto-assistant/ditto-subnet/pull/1729),
+  [`92a88a5`](https://github.com/ditto-assistant/ditto-subnet/commit/92a88a5c23e4ab867ace72aaae87cace9b267e4e))
+
+- **coding**: Own Rust compiler and candidate lifecycles
+  ([#1728](https://github.com/ditto-assistant/ditto-subnet/pull/1728),
+  [`f38970e`](https://github.com/ditto-assistant/ditto-subnet/commit/f38970e8b5cb639d288abc105c8cfa44fae88454))
+
+- **coding**: Verify frozen Rust compiler inputs
+  ([#1727](https://github.com/ditto-assistant/ditto-subnet/pull/1727),
+  [`176d906`](https://github.com/ditto-assistant/ditto-subnet/commit/176d90608f39f887c42c59cd0f44ffe8fd7dbb0d))
+
+
 ## v0.242.0 (2026-09-08)
 
 ### Features
