@@ -2,6 +2,15 @@
 
 <!-- version list -->
 
+## v0.243.1 (2026-09-08)
+
+### Bug Fixes
+
+- **scoring**: Reject runs with platform inference errors
+  ([#1738](https://github.com/ditto-assistant/ditto-subnet/pull/1738),
+  [`421ca8e`](https://github.com/ditto-assistant/ditto-subnet/commit/421ca8e11b7f7190fecff458ed395341fb11347f))
+
+
 ## v0.243.0 (2026-09-08)
 
 ### Features
