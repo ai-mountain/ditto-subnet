@@ -2,6 +2,15 @@
 
 <!-- version list -->
 
+## v0.243.2 (2026-09-08)
+
+### Bug Fixes
+
+- **release**: Use a valid scorer attestation predicate URI
+  ([#1740](https://github.com/ditto-assistant/ditto-subnet/pull/1740),
+  [`e85f51e`](https://github.com/ditto-assistant/ditto-subnet/commit/e85f51e68a27689f1d144a2715d5936dbdde56ba))
+
+
 ## v0.243.1 (2026-09-08)
 
 ### Bug Fixes
