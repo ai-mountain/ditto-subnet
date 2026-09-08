@@ -2,6 +2,15 @@
 
 <!-- version list -->
 
+## v0.241.0 (2026-09-08)
+
+### Features
+
+- **infra**: Add the screener-review-ditto-inference-key secret and grant
+  ([#1717](https://github.com/ditto-assistant/ditto-subnet/pull/1717),
+  [`f55e0c8`](https://github.com/ditto-assistant/ditto-subnet/commit/f55e0c8f1ed8efc77b0dd2415f2f3ab46df15d47))
+
+
 ## v0.240.1 (2026-09-08)
 
 ### Bug Fixes
