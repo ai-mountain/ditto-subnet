@@ -2,6 +2,15 @@
 
 <!-- version list -->
 
+## v0.240.1 (2026-09-08)
+
+### Bug Fixes
+
+- **screener**: Hold a refused adjudication instead of clearing it
+  ([#1714](https://github.com/ditto-assistant/ditto-subnet/pull/1714),
+  [`0a9756f`](https://github.com/ditto-assistant/ditto-subnet/commit/0a9756f065468847280e6335d3ba06aca70b8c93))
+
+
 ## v0.240.0 (2026-09-08)
 
 ### Features
