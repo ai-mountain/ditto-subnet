@@ -2,6 +2,51 @@
 
 <!-- version list -->
 
+## v0.244.0 (2026-09-09)
+
+### Bug Fixes
+
+- **infra**: Recover PostgreSQL root disk capacity
+  ([#1744](https://github.com/ditto-assistant/ditto-subnet/pull/1744),
+  [`2a6c1ec`](https://github.com/ditto-assistant/ditto-subnet/commit/2a6c1eca485fc57c9a95ab8dee843e069fd81fda))
+
+### Chores
+
+- **ops**: Add bounded PostgreSQL recovery diagnostics
+  ([#1743](https://github.com/ditto-assistant/ditto-subnet/pull/1743),
+  [`f993364`](https://github.com/ditto-assistant/ditto-subnet/commit/f993364ac1407a6e3a941025091004a605e5ab4c))
+
+- **tests**: Qualify coding evidence process-death recovery
+  ([#1736](https://github.com/ditto-assistant/ditto-subnet/pull/1736),
+  [`d4342a4`](https://github.com/ditto-assistant/ditto-subnet/commit/d4342a411e19cdaaaf033a5622ff17ad1704324a))
+
+### Features
+
+- **backroom**: Expose native coding release registration state
+  ([#1735](https://github.com/ditto-assistant/ditto-subnet/pull/1735),
+  [`640ced7`](https://github.com/ditto-assistant/ditto-subnet/commit/640ced79b9236f70cad927824cc7aefc7dbd8d37))
+
+- **coding**: Bind native controls to approved manifests
+  ([#1737](https://github.com/ditto-assistant/ditto-subnet/pull/1737),
+  [`fb05812`](https://github.com/ditto-assistant/ditto-subnet/commit/fb058120f0588107d42bcaddddd5d3e8563f221f))
+
+- **coding**: Bind native host preflight to release approvals
+  ([#1733](https://github.com/ditto-assistant/ditto-subnet/pull/1733),
+  [`d38b30d`](https://github.com/ditto-assistant/ditto-subnet/commit/d38b30d1f7b949d43d6b755e11e81882b21da7a1))
+
+- **coding**: Bound approved single-host shadow rollouts
+  ([#1742](https://github.com/ditto-assistant/ditto-subnet/pull/1742),
+  [`2d57354`](https://github.com/ditto-assistant/ditto-subnet/commit/2d57354bb4c395ccd16478c07891b09e82f1d628))
+
+- **coding**: Package four-language native release artifacts
+  ([#1732](https://github.com/ditto-assistant/ditto-subnet/pull/1732),
+  [`21d22a6`](https://github.com/ditto-assistant/ditto-subnet/commit/21d22a6022284050d1df27db32d9a01568e9b107))
+
+- **coding**: Verify native canary evidence without replay
+  ([#1739](https://github.com/ditto-assistant/ditto-subnet/pull/1739),
+  [`fd902cc`](https://github.com/ditto-assistant/ditto-subnet/commit/fd902cc08cc50cd820355e49154ab9efb3122d6f))
+
+
 ## v0.243.2 (2026-09-08)
 
 ### Bug Fixes
